@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-t=f+n822temlgsn58-@p3y-)rui++svoghmr+#*)g_gax82%_r
 DEBUG = True
 
 ALLOWED_HOSTS = []
+# AUTH_USER_MODEL = 'recipes.CustomUser'
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'recipes'
 ]
 
 MIDDLEWARE = [
