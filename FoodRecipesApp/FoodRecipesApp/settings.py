@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-t=f+n822temlgsn58-@p3y-)rui++svoghmr+#*)g_gax82%_r
 DEBUG = True
 
 ALLOWED_HOSTS = []
-# AUTH_USER_MODEL = 'recipes.CustomUser'
+AUTH_USER_MODEL = 'recipes.CustomUser'
 
 
 # Application definition
@@ -117,7 +117,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
-
+MEDIA_ROOT = os.path.join(BASE_DIR, "data/")
+MEDIA_URL = '/data/'
 STATIC_URL = 'static/'
 
 # Default primary key field type
