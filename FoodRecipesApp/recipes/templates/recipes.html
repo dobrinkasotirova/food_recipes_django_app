@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container">
+    <div class="row">
+        {% for r in recipes %}
+            <div class="col-md-4 mb-4">
+            <div class="card" style="max-width: 25rem;">
+                <img class="card-img-top" src="{{ MEDIA_URL }}{{ r.image.url }}" height="305rem" alt="Card image cap">
+                <div class="card-body">
+                    <h5 class="card-title">{{ r.name }}</h5>
+                    <p class="card-text">{{ r.description |slice:":170" }}...</p>
+                    <p class="card-text" style="display: flex">
+                        <small class="text-muted pt-2" style="width: 70%">Created by {{ r.user.get_full_name }}</small>
+                        <button type="button" class="btn btn-outline-dark">See More</button>
+                    </p>
+                </div>
+            </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
