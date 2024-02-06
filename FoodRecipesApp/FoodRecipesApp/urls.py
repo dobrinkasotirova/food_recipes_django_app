@@ -18,7 +18,7 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from recipes.views import index, user_login, register_customer, logout_view, all_recipes
+from recipes.views import index, user_login, delete_recipe, details, register_customer, logout_view, all_recipes, add_recipe, edit_recipe
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,5 +26,9 @@ urlpatterns = [
     path('login/', user_login),
     path('register/', register_customer),
     path('logout/', logout_view, name='logout'),
-    path('recipes/', all_recipes)
+    path('recipes/', all_recipes),
+    path('recipes/<int:recipe_id>/', details, name="details"),
+    path('delete-recipe/<int:recipe_id>/', delete_recipe, name='delete_recipe'),
+    path('add-recipe/', add_recipe, name='add_recipe'),
+    path('recipe/edit/<int:recipe_id>/', edit_recipe, name='edit_recipe'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -34,7 +34,7 @@ class Recipe(models.Model):
     prep_time = models.PositiveIntegerField(default=0)  # overall recipe preparation time in minutes
     cook_time = models.PositiveIntegerField(default=0)  # time needed for cooking/baking
     servings = models.IntegerField(default=0)
-    image = models.ImageField(upload_to="data")
+    image = models.ImageField(upload_to="data/")
 
     def __str__(self):
         return f"{self.name}"
