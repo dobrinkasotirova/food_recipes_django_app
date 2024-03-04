@@ -18,12 +18,12 @@ from django.contrib import admin
 from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
-from recipes.views import index, user_login, delete_recipe, details, register_customer, logout_view, all_recipes, add_recipe, edit_recipe
+from recipes.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index),
-    path('login/', user_login),
+    path('login/', user_login, name="login"),
     path('register/', register_customer),
     path('logout/', logout_view, name='logout'),
     path('recipes/', all_recipes),
@@ -31,4 +31,6 @@ urlpatterns = [
     path('delete-recipe/<int:recipe_id>/', delete_recipe, name='delete_recipe'),
     path('add-recipe/', add_recipe, name='add_recipe'),
     path('recipe/edit/<int:recipe_id>/', edit_recipe, name='edit_recipe'),
+    path('for-you/', for_you, name="for_you")
+    # path('recipe/<int:recipe_id>/', recipe_review, name='recipe_review'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

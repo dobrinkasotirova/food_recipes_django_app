@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    {% if user.is_authenticated %}
+        <h1>Hello World</h1>
+    {% else %}
+        <div class="container">
+            <h2 class="text-center mb-4">Welcome</h2>
+            <p class="text-center">You need to login to access this page.</p>
+            <div class="text-center">
+                <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

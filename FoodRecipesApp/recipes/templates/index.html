@@ -1,8 +1,131 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-    {% if user.is_authenticated %}
+    <style>
+    .recipe-card {
+    position: relative;
+    overflow: hidden;
+}
 
-    {% else %}
+.recipe-card img {
+    width: 100%;
+    height: auto;
+}
 
-    {% endif %}
+.recipe-card .overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+    .recipe-card:hover .overlay {
+        opacity: 1;
+    }
+
+    .recipe-card .overlay h5 {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 18px;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .quote-card {
+        text-align: center;
+    }
+
+    .quote {
+        font-style: italic;
+        color: #666;
+        font-size: 20px;
+        margin-top: 20px;
+    }
+    .recipe-card .overlay a {
+    text-decoration: none; /* Remove underline from link */
+    color: inherit; /* Inherit text color from parent */
+    font-weight: bold;
+}
+    </style>
+<div class="container">
+    <div class="row">
+        {% for recipe in recipes %}
+        <div class="col-md-2 mb-4">
+            <div class="recipe-card">
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
+                <div class="overlay" style="text-align: center;">
+{#                    <h5 class="card-title">{{ recipe.name }}</h5>#}
+                    <a href="{% url 'details' recipe.id %}" class="card-footer">{{ recipe.name }}</a>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter == 2 %}
+        <div class="col-md-2 offset-md-1 mb-4" style="margin:0;width: 350px">
+            <div class="quote-card">
+                <p class="quote">"The only thing I like better than talking about food is eating."</p>
+            </div>
+        </div>
+        {% endif %}
+        {% if forloop.counter == 4 %}
+        <div class="col-md-2 offset-md-1 mb-4">
+            <div class="quote-card">
+                <p class="quote">"One cannot think well, love well, sleep well, if one has not dined well."</p>
+            </div>
+        </div>
+        {% endif %}
+        {% if forloop.counter == 6 %}
+        <div class="col-md-2 offset-md-1 mb-4">
+            <div class="quote-card">
+                <p class="quote">"Good food ends with good talk."</p>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+    <div class="container">
+    <div class="row" style="text-align: center">
+        {% for recipe in recipes %}
+        <div class="col-md-2 mb-4">
+            <div class="recipe-card">
+                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
+                <div class="overlay">
+                    <h5 class="card-title">{{ recipe.name }}</h5>
+                </div>
+            </div>
+        </div>
+        {% if forloop.counter == 2 %}
+        <div class="col-md-2 offset-md-1 mb-4" style="margin:0;width: 350px">
+            <div class="quote-card">
+                <p class="quote">"The only thing I like better than talking about food is eating."</p>
+            </div>
+        </div>
+        {% endif %}
+        {% if forloop.counter == 4 %}
+        <div class="col-md-2 offset-md-1 mb-4">
+            <div class="quote-card">
+                <p class="quote">"One cannot think well, love well, sleep well, if one has not dined well."</p>
+            </div>
+        </div>
+        {% endif %}
+        {% if forloop.counter == 6 %}
+        <div class="col-md-2 offset-md-1 mb-4">
+            <div class="quote-card">
+                <p class="quote">"Good food ends with good talk."</p>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

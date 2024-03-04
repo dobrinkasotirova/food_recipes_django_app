@@ -29,6 +29,27 @@
                 </div>
             </div>
         </div>
+    <div>
+        <h3>Reviews:</h3>
+    <div class="container w-75 m-auto">
+        <div class="w-75 m-auto shadow-lg bg-light rounded p-5">
+
+            <form method="POST" action="{% url 'details' recipe.id %}" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit"  class="btn btn-success">Save</button>
+            </form>
+
+        </div>
+      </div>
+        {% for review in reviews %}
+            <div class="row">
+                <h4>{{ review.user.get_full_name }}</h4>
+                <h4>{{ review.rating }}</h4>
+                <p>{{ review.comment }}</p>
+            </div>
+        {% endfor %}
+    </div>
     </div>
 
 

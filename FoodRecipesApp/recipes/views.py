@@ -1,14 +1,17 @@
+import datetime
+
 from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import logout
-from .forms import CustomAuthenticationForm, CustomerRegistrationForm, AddRecipeForm, EditRecipeForm
+from .forms import CustomAuthenticationForm, CustomerRegistrationForm, AddRecipeForm, EditRecipeForm, ReviewForm
 from .models import *
 # Create your views here.
 
 def index(request):
-    return render(request, "index.html")
+    recipes = Recipe.objects.all()[:6]
+    return render(request, "index.html", context={"recipe1": recipes[0], "recipe2": recipes[1], "recipe3": recipes[2], "recipes": recipes})
 
 def user_login(request):
     if request.method == 'POST':
@@ -44,14 +47,32 @@ def all_recipes(request):
     context = {"recipes": recipes}
     return render(request, "recipes.html", context)
 
+
 def details(request, recipe_id=None):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     categories = Category.objects.all()
+    reviews = Review.objects.filter(recipe=recipe).all()
+    form = ReviewForm()
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, request.FILES)
+        if form.is_valid():
+            # Create a new Review instance, but don't save it to the database yet
+            new_review = form.save(commit=False)
+            # Now you can set the additional fields on the new_review object
+            new_review.recipe = recipe
+            new_review.user = request.user
+            new_review.date_posted = timezone.now()  # It's better to use Django's timezone.now()
+            # Save the new_review instance to the database
+            new_review.save()
+            return redirect('details', recipe_id=recipe_id)
+
     context = {
         'recipe': recipe,
-        'categories': categories
+        'categories': categories,
+        'reviews': reviews,
+        'form': form
     }
-    return render(request, 'details.html', context)
+    return render(request, 'details.html', context=context)
 
 
 def delete_recipe(request, recipe_id):
@@ -90,5 +111,23 @@ def edit_recipe(request, recipe_id):
         form = EditRecipeForm(instance=recipe)
 
     return render(request, 'details.html', {'form': form})
+
+
+def for_you(request):
+    return render(request, "for_you.html")
+
+# def recipe_review(request, recipe_id):
+#     recipe = get_object_or_404(Recipe, id=recipe_id)
+#     reviews = Review.objects.filter(recipe=recipe)
+#     form = ReviewForm()
+#     if request.method == 'POST':
+#         form = ReviewForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             review = form.save(commit=False)
+#             review.recipe = recipe
+#             review.user = request.user
+#             review.save()
+#             return redirect('details', recipe_id=recipe_id)
+#     return render(request, 'details.html', {'recipe': recipe, 'reviews': reviews, 'form': form})
 
 
