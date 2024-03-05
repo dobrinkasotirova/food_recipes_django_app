@@ -2,130 +2,95 @@
 {% load static %}
 
 {% block content %}
-    <style>
-    .recipe-card {
-    position: relative;
-    overflow: hidden;
-}
+    <body>
 
-.recipe-card img {
-    width: 100%;
-    height: auto;
-}
+    <!-- Header -->
+    <header class="w3-display-container w3-content w3-wide" style="max-width:1600px;min-width:500px" id="home">
+        <img class="w3-image"
+             src="https://img.freepik.com/free-photo/woman-chef-cooking-vegetables-pan_1303-22291.jpg"
+             alt="Hamburger Catering" width="1600" height="800">
+        <div class="w3-display-bottomleft w3-padding-large w3-opacity">
+            <h1 class="w3-xxlarge">RecipeAI</h1>
+        </div>
+    </header>
 
-.recipe-card .overlay {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    color: white;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-    .recipe-card:hover .overlay {
-        opacity: 1;
-    }
+    <!-- Page content -->
+    <div class="w3-content" style="max-width:1100px">
 
-    .recipe-card .overlay h5 {
-        position: absolute;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        font-size: 18px;
-        font-weight: bold;
-        text-align: center;
-    }
+        <!-- About Section -->
+        <div class="w3-row w3-padding-64" id="about">
+            <div class="w3-col m6 w3-padding-large w3-hide-small">
+                <img src="https://static.vecteezy.com/system/resources/previews/030/468/237/large_2x/a-mediterranean-dining-experience-dinner-table-set-outdoors-in-a-charming-setting-vertical-mobile-wallpaper-ai-generated-free-photo.jpg"
+                     class="w3-round w3-image w3-opacity-min" alt="Table Setting" width="600" height="750">
+            </div>
 
-    .quote-card {
-        text-align: center;
-    }
-
-    .quote {
-        font-style: italic;
-        color: #666;
-        font-size: 20px;
-        margin-top: 20px;
-    }
-    .recipe-card .overlay a {
-    text-decoration: none; /* Remove underline from link */
-    color: inherit; /* Inherit text color from parent */
-    font-weight: bold;
-}
-    </style>
-<div class="container">
-    <div class="row">
-        {% for recipe in recipes %}
-        <div class="col-md-2 mb-4">
-            <div class="recipe-card">
-                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
-                <div class="overlay" style="text-align: center;">
-{#                    <h5 class="card-title">{{ recipe.name }}</h5>#}
-                    <a href="{% url 'details' recipe.id %}" class="card-footer">{{ recipe.name }}</a>
-                </div>
+            <div class="w3-col m6 w3-padding-large">
+                <h1 class="w3-center">About RecipeAI</h1><br>
+                <h5 class="w3-center">Tradition since 1889</h5>
+                <p class="w3-large">The Catering was founded in blabla by Mr. Smith in lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat. Duis aute iruredolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur.We only use <span
+                            class="w3-tag w3-light-grey">seasonal</span> ingredients.</p>
+                <p class="w3-large">The Catering was founded in blabla by Mr. Smith in lorem ipsum dolor sit amet,
+                    consectetur adipiscing elit consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+                    aliquip ex ea commodo consequat. Duis aute iruredolor in reprehenderit in voluptate velit esse
+                    cillum dolore eu fugiat nulla pariatur.We only use <span
+                            class="w3-tag w3-light-grey">seasonal</span> ingredients.</p>
+                <p class="w3-large w3-text-grey w3-hide-medium">Excepteur sint occaecat cupidatat non proident, sunt in
+                    culpa qui officia deserunt mollit anim id est laborum consectetur adipiscing elit, sed do eiusmod
+                    temporincididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+                    exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
             </div>
         </div>
-        {% if forloop.counter == 2 %}
-        <div class="col-md-2 offset-md-1 mb-4" style="margin:0;width: 350px">
-            <div class="quote-card">
-                <p class="quote">"The only thing I like better than talking about food is eating."</p>
+
+        <hr>
+
+        <!-- Menu Section -->
+        <div class="w3-row w3-padding-64" id="menu">
+            <div class="w3-col l6 w3-padding-large">
+                <h1 class="w3-center">Our Recipes</h1><br>
+                {% for recipe in recipes %}
+                    <a href="{% url 'details' recipe.id %}" style="text-decoration: none; color:black;font-size:25px;margin-left: 0!important;">{{ recipe.name }}</a>
+                    <p href="{% url 'details' recipe.id %}" class="w3-text-grey">{{ recipe.description | truncatewords:20 }}</p><br>
+                {% endfor %}
+            </div>
+
+            <div class="w3-col l6 w3-padding-large">
+                <img src="https://s3.envato.com/files/244865298/FM7_9635_vert.jpg"
+                     class="w3-round w3-image w3-opacity-min" alt="Menu" style="width:100%">
             </div>
         </div>
-        {% endif %}
-        {% if forloop.counter == 4 %}
-        <div class="col-md-2 offset-md-1 mb-4">
-            <div class="quote-card">
-                <p class="quote">"One cannot think well, love well, sleep well, if one has not dined well."</p>
-            </div>
+
+        <hr>
+
+        <!-- Contact Section -->
+        <div class="w3-container w3-padding-64" id="contact">
+            <h1>Contact</h1><br>
+            <p>We offer full-service catering for any event, large or small. We understand your needs and we will cater
+                the food to satisfy the biggerst criteria of them all, both look and taste. Do not hesitate to contact
+                us.</p>
+            <p class="w3-text-blue-grey w3-large"><b>Catering Service, 42nd Living St, 43043 New York, NY</b></p>
+            <p>You can also contact us by phone 00553123-2323 or email catering@catering.com, or you can send us a
+                message here:</p>
+            <form action="/action_page.php" target="_blank">
+                <p><input class="w3-input w3-padding-16" type="text" placeholder="Name" required name="Name"></p>
+                <p><input class="w3-input w3-padding-16" type="number" placeholder="How many people" required
+                          name="People"></p>
+                <p><input class="w3-input w3-padding-16" type="datetime-local" placeholder="Date and time" required
+                          name="date" value="2020-11-16T20:00"></p>
+                <p><input class="w3-input w3-padding-16" type="text" placeholder="Message \ Special requirements"
+                          required name="Message"></p>
+                <p>
+                    <button class="w3-button w3-light-grey w3-section" type="submit">SEND MESSAGE</button>
+                </p>
+            </form>
         </div>
-        {% endif %}
-        {% if forloop.counter == 6 %}
-        <div class="col-md-2 offset-md-1 mb-4">
-            <div class="quote-card">
-                <p class="quote">"Good food ends with good talk."</p>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
+
+        <!-- End page content -->
     </div>
-</div>
-    <div class="container">
-    <div class="row" style="text-align: center">
-        {% for recipe in recipes %}
-        <div class="col-md-2 mb-4">
-            <div class="recipe-card">
-                <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.name }}">
-                <div class="overlay">
-                    <h5 class="card-title">{{ recipe.name }}</h5>
-                </div>
-            </div>
-        </div>
-        {% if forloop.counter == 2 %}
-        <div class="col-md-2 offset-md-1 mb-4" style="margin:0;width: 350px">
-            <div class="quote-card">
-                <p class="quote">"The only thing I like better than talking about food is eating."</p>
-            </div>
-        </div>
-        {% endif %}
-        {% if forloop.counter == 4 %}
-        <div class="col-md-2 offset-md-1 mb-4">
-            <div class="quote-card">
-                <p class="quote">"One cannot think well, love well, sleep well, if one has not dined well."</p>
-            </div>
-        </div>
-        {% endif %}
-        {% if forloop.counter == 6 %}
-        <div class="col-md-2 offset-md-1 mb-4">
-            <div class="quote-card">
-                <p class="quote">"Good food ends with good talk."</p>
-            </div>
-        </div>
-        {% endif %}
-        {% endfor %}
-    </div>
-</div>
+
+    </body>
 {% endblock %}
