@@ -52,6 +52,12 @@ def details(request, recipe_id=None):
     recipe = get_object_or_404(Recipe, id=recipe_id)
     categories = Category.objects.all()
     reviews = Review.objects.filter(recipe=recipe).all()
+    total_review = 0
+    if reviews:
+        total = 0
+        for review in reviews:
+            total += review.rating
+        total_review = total/len(reviews)*1.0
     form = ReviewForm()
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
@@ -70,7 +76,8 @@ def details(request, recipe_id=None):
         'recipe': recipe,
         'categories': categories,
         'reviews': reviews,
-        'form': form
+        'form': form,
+        'total_review': total_review
     }
     return render(request, 'details.html', context=context)
 
