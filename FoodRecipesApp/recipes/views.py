@@ -1,15 +1,32 @@
-import datetime
-
-from django.shortcuts import render
 from django.contrib.auth import login, authenticate
-from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import logout
 from .forms import CustomAuthenticationForm, CustomerRegistrationForm, AddRecipeForm, EditRecipeForm, ReviewForm
 from .models import *
+from django.core.mail import send_mail
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
 
 
-# Create your views here.
+@csrf_exempt  # Only for demonstration. Use CSRF protection in production.
+def contact_form_submission(request):
+    if request.method == 'POST':
+        title = request.POST.get('Title')
+        message = request.POST.get('Message')
+
+        # Send email
+        send_mail(
+            'Contact Form Submission',
+            f'Title: {title}\nMessage: {message}',
+            'recipesa369@gmail.com',  # Replace with your email
+            ['dobrinkasotirovapvt@gmail.com'],  # Replace with recipient's email
+            fail_silently=False,
+        )
+
+        return JsonResponse({'success': True})
+    else:
+        return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
 
 def index(request):
     recipes = Recipe.objects.all()[:6]
