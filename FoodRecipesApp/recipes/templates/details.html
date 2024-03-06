@@ -64,7 +64,9 @@
                         Delete Recipe
                     </button>
 
-                    <h3 style="padding-top: 20px">Total review: {{ total_review }}⭐</h3>
+                    <h3 style="padding-top: 20px">Total review: {{ total_review }}★</h3>
+{#                    ⭐#}
+
                 </div>
             </div>
         </div>
@@ -97,7 +99,7 @@
                                                  height="60"/>
                                             <div>
                                                 <h6 class="fw-bold text-primary mb-1">{{ review.user.get_full_name }}</h6>
-                                                <h3>{{ review.rating }}⭐</h3>
+                                                <h3>{{ review.rating }}★</h3>
                                                 <p class="text-muted small mb-0">
                                                     {{ review.date_posted }}
                                                 </p>

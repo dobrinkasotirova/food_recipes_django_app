@@ -137,4 +137,5 @@ def for_you(request):
 #             return redirect('details', recipe_id=recipe_id)
 #     return render(request, 'details.html', {'recipe': recipe, 'reviews': reviews, 'form': form})
 
-
+def contact(request):
+    return render(request, "contact.html")
