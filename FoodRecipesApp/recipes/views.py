@@ -11,13 +11,13 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt  # Only for demonstration. Use CSRF protection in production.
 def contact_form_submission(request):
     if request.method == 'POST':
-        title = request.POST.get('Title')
+        email = request.POST.get('Email')
         message = request.POST.get('Message')
 
         # Send email
         send_mail(
             'Contact Form Submission',
-            f'Title: {title}\nMessage: {message}',
+            f'Email: {email}\nMessage: {message}',
             'recipesa369@gmail.com',  # Replace with your email
             ['dobrinkasotirovapvt@gmail.com'],  # Replace with recipient's email
             fail_silently=False,
