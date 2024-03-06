@@ -1,32 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="container" style="text-align: center">
-    <div class="col-3 pb-3" style="width:100%; font-family: 'Rowdies'" >
-        <a href="{% url 'add_recipe' %}">
-            <button type="submit" class="btn btn-lg btn-danger p-3 m-1 "
-                    style="background-color: black!important; border: black!important;width: 50%;height: 55px">ADD NEW RECIPE
-            </button>
-        </a>
-    </div>
-    <div class="row">
-        {% for r in recipes %}
-            <div class="col-md-4 mb-4">
-            <div class="card" style="max-width: 25rem;">
-                <img class="card-img-top" src="{{ MEDIA_URL }}{{ r.image.url }}" height="305rem" alt="Card image cap">
-                <div class="card-body">
-                    <h5 class="card-title">{{ r.name }}</h5>
-                    <p class="card-text">{{ r.description |slice:":170" }}...</p>
-                    <p class="card-text" style="display: flex">
-                        <small class="text-muted pt-2" style="width: 70%">Created by {{ r.user.get_full_name }}</small>
-                        <a href="{% url 'details' r.id %}" type="button" class="btn btn-outline-dark">See More</a>
-                    </p>
+    <div class="container" style="text-align: center">
+        {% if user.is_authenticated %}
+            <div class="col-3 pb-3" style="width:100%; font-family: 'Rowdies'">
+                <a href="{% url 'add_recipe' %}">
+                    <button type="submit" class="btn btn-lg btn-danger p-3 m-1 "
+                            style="background-color: black!important; border: black!important;width: 50%;height: 55px">
+                        ADD NEW RECIPE
+                    </button>
+                </a>
+            </div>
+        {% else %}
+            <div class="col-3 pb-3" style="width:100%; font-family: 'Rowdies'">
+                <a href="/login">
+                    <button type="submit" class="btn btn-lg btn-danger p-3 m-1 "
+                            style="background-color: black!important; border: black!important;width: 50%;height: 55px">
+                        ADD NEW RECIPE
+                    </button>
+                </a>
+            </div>
+
+        {% endif %}
+        <div class="row">
+            {% for r in recipes %}
+                <div class="col-md-4 mb-4">
+                    <div class="card" style="max-width: 25rem;">
+                        <img class="card-img-top" src="{{ MEDIA_URL }}{{ r.image.url }}" height="305rem"
+                             alt="Card image cap">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ r.name }}</h5>
+                            <p class="card-text">{{ r.description |slice:":170" }}...</p>
+                            <p class="card-text" style="display: flex">
+                                <small class="text-muted pt-2" style="width: 70%">Created
+                                    by {{ r.user.get_full_name }}</small>
+                                <a href="{% url 'details' r.id %}" type="button" class="btn btn-outline-dark">See
+                                    More</a>
+                            </p>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}
 
 

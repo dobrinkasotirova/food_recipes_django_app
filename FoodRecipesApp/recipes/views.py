@@ -7,11 +7,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import logout
 from .forms import CustomAuthenticationForm, CustomerRegistrationForm, AddRecipeForm, EditRecipeForm, ReviewForm
 from .models import *
+
+
 # Create your views here.
 
 def index(request):
     recipes = Recipe.objects.all()[:6]
-    return render(request, "index.html", context={"recipe1": recipes[0], "recipe2": recipes[1], "recipe3": recipes[2], "recipes": recipes})
+    return render(request, "index.html",
+                  context={"recipe1": recipes[0], "recipe2": recipes[1], "recipe3": recipes[2], "recipes": recipes})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -26,6 +30,7 @@ def user_login(request):
     else:
         form = CustomAuthenticationForm()
     return render(request, 'login.html', {'form': form})
+
 
 def register_customer(request):
     if request.method == 'POST':
@@ -42,6 +47,7 @@ def logout_view(request):
     logout(request)
     return redirect('/')
 
+
 def all_recipes(request):
     recipes = Recipe.objects.all()
     context = {"recipes": recipes}
@@ -57,7 +63,7 @@ def details(request, recipe_id=None):
         total = 0
         for review in reviews:
             total += review.rating
-        total_review = total/len(reviews)*1.0
+        total_review = total / len(reviews) * 1.0
     form = ReviewForm()
     if request.method == 'POST':
         form = ReviewForm(request.POST, request.FILES)
@@ -77,7 +83,7 @@ def details(request, recipe_id=None):
         'categories': categories,
         'reviews': reviews,
         'form': form,
-        'total_review': total_review
+        'total_review': round(total_review, 1)
     }
     return render(request, 'details.html', context=context)
 
@@ -122,6 +128,7 @@ def edit_recipe(request, recipe_id):
 
 def for_you(request):
     return render(request, "for_you.html")
+
 
 # def recipe_review(request, recipe_id):
 #     recipe = get_object_or_404(Recipe, id=recipe_id)
