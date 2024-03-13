@@ -41,7 +41,7 @@ class CustomerRegistrationForm(forms.ModelForm):
 class AddRecipeForm(forms.ModelForm):
     class Meta:
         model = Recipe
-        exclude = ('',)
+        exclude = ('user',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

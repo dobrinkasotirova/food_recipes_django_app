@@ -116,7 +116,9 @@ def add_recipe(request):
     if request.method == 'POST':
         form = AddRecipeForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
+            recipe = form.save(commit=False)  # Create but don't save yet
+            recipe.user = request.user  # Set the user
+            recipe.save()  # Save the object with user assigned
             # Redirect to the book details page or any other appropriate URL
             return redirect('/recipes')
     else:
