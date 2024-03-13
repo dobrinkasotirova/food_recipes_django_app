@@ -31,7 +31,7 @@
         }
 
         #review_title {
-            margin-top: 30px!important;
+            margin-top: 30px !important;
             font-weight: bold;
             font-family: 'Rowdies';
         }
@@ -53,6 +53,8 @@
                 <div class="col-md-6 text-center justify-content-center align-center">
 
                     <img style="width: 27rem; height: 30rem" class="mb-3" src="{{ MEDIA_URL }}{{ recipe.image.url }}">
+                    {% if user.is_authenticated and recipe.user == user %}
+
                     <button type="button" class="btn btn-lg text-light" style="background-color: #262933eb"
                             data-bs-toggle="modal"
                             data-bs-target="#editModal">
@@ -63,28 +65,36 @@
                             data-bs-target="#deleteModal">
                         Delete Recipe
                     </button>
+                    {% endif %}
 
                     <h3 style="padding-top: 20px">Total review: {{ total_review }}★</h3>
-{#                    ⭐#}
+                    {#                    ⭐#}
 
                 </div>
             </div>
         </div>
         <div>
-{#            <h3 class="w-80 p-5" id="review_title"#}
-{#                style="margin-top: 20px;margin-bottom: 20px; text-align: center">Reviews:</h3>#}
             <div class="container w-75 m-auto">
-                <div class="w-80 m-auto rounded">
-
-                    <form method="POST" action="{% url 'details' recipe.id %}" enctype="multipart/form-data"
-                          id="comment_section">
-                        {% csrf_token %}
-                        {{ form }}
-                        <button type="submit" class="btn btn-success">Comment</button>
-                    </form>
-
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="w-80 m-auto rounded">
+                        <form method="POST" action="{% url 'details' recipe.id %}" enctype="multipart/form-data"
+                              id="comment_section">
+                            {% csrf_token %}
+                            {{ form }}
+                            <button type="submit" class="btn btn-success">Comment</button>
+                        </form>
+                    </div>
+                {% else %}
+                    <div class="container w-75 m-auto text-center mt-5 mb-5"
+                         style="padding: 20px; background-color: #f8f9fa; border-radius: 5px; border: 1px solid #dee2e6;">
+                        <p style="font-size: 1.2rem; font-weight: bold;">You must be
+                            <a href="{% url 'login' %}" style="color: #007bff; text-decoration: none;">logged in</a> to
+                            post a comment.</p>
+                    </div>
+                {% endif %}
             </div>
+            <h3 class="w-80 p-5" id="review_title"
+                style="margin-top: 10px;margin-bottom: 10px; text-align: center; font-size: 35px">Reviews:</h3>
             {% for review in reviews %}
                 <section>
                     <div class="container py-2">

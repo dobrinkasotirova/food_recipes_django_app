@@ -61,6 +61,10 @@ class EditRecipeForm(forms.ModelForm):
 
 
 class ReviewForm(forms.ModelForm):
+    RATING_CHOICES = [(i, str(i)) for i in range(11)]  # Choices from 0 to 10
+
+    rating = forms.ChoiceField(label='Rating', choices=RATING_CHOICES)
+
     class Meta:
         model = Review
         fields = ['comment', 'rating']
@@ -69,4 +73,10 @@ class ReviewForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         for field in self.visible_fields():
             field.field.widget.attrs['class'] = 'form-control mb-3'
+
+    def clean_rating(self):
+        rating = int(self.cleaned_data.get('rating'))
+        if rating < 0 or rating > 10:
+            raise forms.ValidationError("Rating must be between 0 and 10.")
+        return rating
 

@@ -17,6 +17,6 @@ urlpatterns = [
     path('recipe/edit/<int:recipe_id>/', edit_recipe, name='edit_recipe'),
     path('for-you/', for_you, name="for_you"),
     path('contact/', contact, name="contact"),
-    path('contact-form/', contact_form_submission, name='contact_form_submission')
+    path('contact-form/', contact_form_submission, name='contact_form_submission'),
     # path('recipe/<int:recipe_id>/', recipe_review, name='recipe_review'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
