@@ -1,3 +1,5 @@
 .idea/
 venv/
 .env
+recipes/model/*
+__pycache__

@@ -6,7 +6,18 @@ from .models import *
 from django.core.mail import send_mail
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from langchain.document_loaders import TextLoader
+from langchain.text_splitter import CharacterTextSplitter,RecursiveCharacterTextSplitter
+from langchain.vectorstores import Chroma
+from langchain.chains import ConversationalRetrievalChain
+from langchain.embeddings import GPT4AllEmbeddings
+from langchain.llms import GPT4All
+from gpt4all import GPT4All as gpt
+import os
 
+
+chain = None
+chat_history = list()
 
 @csrf_exempt  # Only for demonstration. Use CSRF protection in production.
 def contact_form_submission(request):
@@ -68,7 +79,7 @@ def logout_view(request):
 def all_recipes(request):
     recipes = Recipe.objects.all()
     context = {"recipes": recipes}
-    return render(request, "recipes.html", context)
+    return render(request, "all_recipes.html", context)
 
 
 def details(request, recipe_id=None):
@@ -146,7 +157,7 @@ def edit_recipe(request, recipe_id):
 
 
 def for_you(request):
-    return render(request, "for_you.html")
+    return render(request, "for_you.html", context={"chat_history":chat_history})
 
 
 # def recipe_review(request, recipe_id):
@@ -165,3 +176,60 @@ def for_you(request):
 
 def contact(request):
     return render(request, "contact.html")
+
+
+def my_recipes(request):
+    recipes = Recipe.objects.filter(user=request.user).all()
+    return render(request, "recipes.html", context={"recipes": recipes})
+
+
+def gpt4all_recipe_suggestions(request):
+    global chain
+    if request.method == 'POST':
+        question = request.POST.get('question')  # Get the question from the form
+        knowledge_base_folder = 'recipes/model_data'
+        files = os.listdir(knowledge_base_folder)
+        documents = list()
+        for f in files:
+            try:
+                file_path = f"{knowledge_base_folder}/{f}"
+
+                # Assuming TextLoader is used to load text from PDF
+                loader = TextLoader(file_path, encoding = 'UTF-8')
+                text = loader.load()
+
+                documents.extend(text)
+                print(documents)
+
+            except Exception as e:
+                print(f"Error loading {file_path}: {str(e)}")
+
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size=256, chunk_overlap=30)
+        split_documents = text_splitter.split_documents(documents)
+        print(len(split_documents))
+        vectorstore = Chroma.from_documents(documents=split_documents, embedding=GPT4AllEmbeddings())
+        print(gpt.list_models())
+        llm = GPT4All(model="recipes/model/mistral-7b-openorca.gguf2.Q4_0")
+        retriever = vectorstore.as_retriever(search_type="similarity", search_kwargs={"k": 2})
+        chain = ConversationalRetrievalChain.from_llm(llm, retriever)
+        global chat_history
+        chat_history = ask_bot(question)  # Assuming ask_bot function exists
+        print(chat_history)
+        return render(request, "for_you.html", context={"chat_history": chat_history})
+
+    return redirect('/')
+
+
+def ask_bot(query):
+    global chat_history
+    result = chain({"question": query, "chat_history": chat_history})
+    chat_history.append((query, result["answer"]))
+    print(chat_history[-1][1])
+    return chat_history
+
+def search(request):
+    search_term = request.GET.get('search_term')
+    recipes = Recipe.objects.filter(name__icontains=search_term).all()
+    context = {"recipes": recipes, "search_term": search_term}
+    return render(request, 'all_recipes.html', context)
+
